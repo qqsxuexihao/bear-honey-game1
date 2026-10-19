@@ -1,0 +1,379 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><meta name="theme-color" content="#315e44"><title>小熊偷蜂蜜 V30 · 十关森林大冒险</title><style>
+:root{--ink:#604021;--cream:#fff6df;--gold:#f7b842}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%;margin:0;overflow:hidden}body{font-family:ui-rounded,"PingFang SC",system-ui,sans-serif;background:radial-gradient(circle at 50% 20%,#c4eac9,#315c43);color:var(--ink);display:flex;align-items:center;justify-content:center;touch-action:none}.shell{width:min(100vw,490px);height:min(100dvh,900px);min-height:410px;position:relative;overflow:hidden;background:#93c88e;box-shadow:0 15px 60px #173a2f66}canvas{display:block;width:100%;height:100%;touch-action:none}.hud{position:absolute;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 9px);display:flex;flex-wrap:wrap;gap:5px;align-items:center;justify-content:space-between;pointer-events:none}.pill{background:#fff5dceb;border:2px solid #af7945;border-radius:14px;padding:6px 8px;font-weight:900;font-size:12px;box-shadow:0 3px 0 #70452445;white-space:nowrap}.hud button{pointer-events:auto}.round{background:#fff1d1;border:2px solid #a86a37;border-radius:11px;width:36px;height:36px;font-size:19px;cursor:pointer}.level-title{position:absolute;top:calc(env(safe-area-inset-top) + 57px);left:50%;transform:translateX(-50%);background:#234735b8;color:#fff9db;border-radius:12px;padding:6px 13px;font-size:12px;font-weight:800;white-space:nowrap;pointer-events:none}.notice{position:absolute;top:calc(env(safe-area-inset-top) + 88px);left:50%;transform:translateX(-50%);width:max-content;max-width:94%;background:#264833de;color:#fffbea;border-radius:14px;padding:10px 14px;font-size:13px;font-weight:800;line-height:1.5;text-align:center;pointer-events:none;transition:opacity .25s}.actions{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 24px);right:11px;display:flex;align-items:flex-end;flex-direction:column;gap:10px}.big-button{width:90px;height:86px;border-radius:42%;border:3px solid #fff4c9;background:linear-gradient(#ffdf79,#f0a742);color:#683d17;box-shadow:0 5px 0 #8d622b80;font-weight:900;font-size:16px;touch-action:manipulation;cursor:pointer}.little-button{width:92px;height:49px;border-radius:16px;border:2px solid #eee6ca;background:#e9fff0e9;color:#315a3c;box-shadow:0 4px 0 #39644a80;font-weight:900;font-size:13px;touch-action:manipulation;cursor:pointer}.little-button:disabled{opacity:.55}.big-button:active,.little-button:active{transform:translateY(3px)}.overlay{position:absolute;inset:0;background:#122d27b3;backdrop-filter:blur(5px);display:flex;justify-content:center;align-items:center;padding:15px;overflow:auto}.overlay.hidden{display:none}.panel{width:100%;max-width:385px;background:linear-gradient(160deg,#fffbea,#f7dca8);border:5px solid #a86c39;border-radius:25px;text-align:center;padding:21px 17px 22px;box-shadow:0 14px 0 #472e2266}.mascot{font-size:52px}.panel h1{margin:7px 0 9px;font-size:26px;line-height:1.3}.panel p{font-size:14px;line-height:1.75;margin:10px 0}.tip{font-size:12px;font-weight:750;line-height:1.7;padding:10px;background:#ebd09f;border-radius:12px;margin-top:9px}.primary{margin-top:15px;padding:13px 23px;background:linear-gradient(#ffde73,#ef9c32);border:2px solid #925725;box-shadow:0 5px 0 #96562d;border-radius:17px;color:#63401e;font-size:18px;font-weight:900;cursor:pointer}.secondary{margin:14px auto 0;display:block;background:none;border:0;text-decoration:underline;color:#765336;cursor:pointer;font-size:13px;padding:5px}.level-list{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:11px 0;max-height:min(41dvh,340px);overflow-y:auto;overscroll-behavior:contain;padding:2px}.stage{background:#f7eac8;border:2px solid #c9a777;border-radius:13px;padding:9px 4px;font-size:12px;font-weight:850;cursor:pointer;color:#654323}.stage:disabled{opacity:.48;cursor:default}.stage strong{display:block;font-size:20px}.stage.selected{background:#ffe09a;border-color:#d58839}.tiny{font-size:12px;color:#765944}@media(min-width:520px){.shell{border:8px solid #f1e4c5;border-radius:24px}}@media(max-height:650px){.panel{padding:12px}.level-list{max-height:31dvh}.mascot{font-size:38px}.panel h1{font-size:22px}.panel p{font-size:12px;margin:6px 0}.tip{padding:5px}.primary{padding:9px 18px}.actions{bottom:12px}.big-button{width:72px;height:72px}}
+</style></head><body><main id="shell" class="shell"><canvas id="world"></canvas><div class="hud"><span class="pill" id="levelHud">🌲 第1关</span><span class="pill" id="score">🍯 0/3</span><span class="pill" id="health">❤️❤️❤️</span><span class="pill" id="time">⏱ 100</span><button class="round" id="pause" aria-label="暂停">⏸</button></div><div class="level-title" id="levelTitle">第一关 · 蜂蜜小径</div><div class="notice" id="notice">点击地面移动，靠近蜂巢偷蜜</div><div class="actions"><button id="sneakBtn" class="little-button">🐾 潜行：关</button><button id="itemBtn" class="little-button">🍃 道具 ×0</button><button id="stealBtn" class="big-button">🍯<br>偷蜂蜜</button></div><div class="overlay" id="overlay"><div class="panel"><div class="mascot" id="mascot">🐻🍯</div><h1 id="heading">小熊的蜂蜜大计划</h1><p id="description">清晨，小熊准备做蜂蜜早餐，却发现罐子空空的！<br>听说森林深处有香甜的蜂蜜，它决定悄悄出发……</p><div class="tip" id="tip">📱 点击或拖动森林地面移动<br>🍯 靠近蜂巢按「偷蜂蜜」<br>🌿 点击「潜行」低姿慢走，草丛里更隐蔽；采蜜需要0.35秒<br>⌨️ 电脑可用方向键/WASD移动，空格偷蜜，E使用道具</div><div id="levelList" class="level-list"></div><button class="primary" id="start">开始冒险 ▶</button><button class="secondary" id="music">🎵 音乐：开启</button><button class="secondary" id="sound">🔊 音效：开启</button></div></div></main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),cv=$('world'),g=cv.getContext('2d'),shell=$('shell'),W=420,H=740;let scale=1,ox=0,oy=0;const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),D=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y),rand=n=>{let q=Math.sin(n*127.13+23.89)*43758.54;return q-Math.floor(q)};
+const HARVEST_TIME=0.35;
+const STAGES=[
+ {name:'蜂蜜小径',subtitle:'第一次偷蜜',target:3,time:110,bees:2,guards:0,ambush:0,queen:0,bushes:3,items:1,theme:0,story:'小熊发现了第一片蜂蜜林。这里的蜜蜂还不知道有贪吃的小客人！'},
+ {name:'灌木迷宫',subtitle:'草丛会保护你',target:4,time:115,bees:2,guards:1,ambush:0,queen:0,bushes:7,items:2,theme:1,story:'巡逻蜂变多了。不过小熊发现，只要静悄悄躲在草丛里，蜜蜂就很难发现它。'},
+ {name:'溪谷蜂巢',subtitle:'沿着小路穿行',target:4,time:125,bees:2,guards:1,ambush:1,queen:0,bushes:5,items:3,theme:2,story:'蜂巢散落在溪谷两侧。穿过狭窄的石桥，才能拿到另一边的蜂蜜。'},
+ {name:'巨树蜂蜜库',subtitle:'守卫轮流值班',target:5,time:135,bees:2,guards:2,ambush:1,queen:0,bushes:7,items:3,theme:3,story:'古老巨树里堆着金灿灿的蜂蜜。守卫蜂会呼叫伙伴，小熊必须抓准时机！'},
+ {name:'蜂后的宝藏',subtitle:'最后的蜂蜜',target:5,time:150,bees:2,guards:2,ambush:1,queen:1,bushes:7,items:4,theme:4,story:'小熊来到第一座蜂蜜宝库，蜂后守护着巨大的蜂巢。闯过这里，就能进入森林更深处！'}
+];
+// 第二篇章：新增环境主题和玩法参数
+STAGES.push(
+ {name:'金色落叶谷',subtitle:'落叶中的藏宝图',target:5,time:145,bees:2,guards:2,ambush:1,queen:0,bushes:8,items:4,theme:5,special:'leaves',story:'风吹过金黄的树林，满地落叶里藏着蜂蜜和补给；注意守卫蜂的巡逻路线。'},
+ {name:'蘑菇迷踪',subtitle:'穿过迷幻蘑菇阵',target:6,time:155,bees:2,guards:2,ambush:2,queen:0,bushes:8,items:5,theme:6,special:'mushroom',story:'巨大的蘑菇占据了小路。靠近紫色孢子圈会减速，试着潜行从草丛绕过。'},
+ {name:'萤火虫森林',subtitle:'借着光点找蜂蜜',target:6,time:155,bees:2,guards:2,ambush:2,queen:0,bushes:9,items:5,theme:7,special:'night',story:'夜幕降临！萤火虫照亮树影，巡逻蜂的视野变短，但接近它们仍然危险。'},
+ {name:'暴风雨蜂谷',subtitle:'雨中抢救蜂蜜',target:6,time:165,bees:2,guards:3,ambush:2,queen:0,bushes:9,items:6,theme:8,special:'storm',story:'乌云盖住山谷，地面出现湿滑水洼。穿越水洼会减速，别被守卫蜂围住。'},
+ {name:'黄金蜂蜜城',subtitle:'最终夺蜜挑战',target:7,time:195,bees:2,guards:3,ambush:2,queen:1,bushes:10,items:6,theme:9,special:'final',story:'森林深处的黄金蜂蜜城终于出现！蜂后会封锁蜂巢。用潜行、道具和绕路完成最后的挑战。'}
+);
+const layouts=[[[83,210],[320,367],[100,516]],[[83,202],[322,288],[96,472],[302,540]],[[90,183],[322,245],[83,423],[324,555]],[[82,210],[324,225],[91,401],[319,487],[213,338]],[[88,195],[322,240],[94,397],[314,514],[217,315]],
+ [[84,200],[326,205],[93,363],[314,371],[210,528]],
+ [[87,199],[318,222],[96,355],[319,397],[105,531],[303,553]],
+ [[82,204],[317,209],[90,359],[316,370],[105,528],[309,540]],
+ [[82,204],[321,211],[85,358],[317,387],[106,528],[303,557]],
+ [[84,188],[324,202],[84,345],[319,343],[88,513],[323,513],[211,270]]];
+let environment=[],sneak=false,path=[],pathGoal=null,pathRefresh=0,stealthPulse=0;let stage=0,unlocked=1,mode='menu',hero={x:207,y:647,r:18,face:1,walk:0,inv:0,cry:0,action:0,hidden:false},bees=[],hives=[],bushes=[],things=[],trees=[],flowers=[],effects=[],goal=null,score=0,hp=3,remaining=110,elapsed=0,harvest=null,held=new Set(),pointer=null,last=0,msgLeft=0,selected=0,inventory=[],bait=null,alarm=0,shake=0,soundOn=true,ctx=null,buzz=null,buzzGain=null,tick=0;
+function audio(force=false){if(!soundOn&&!force)return null;try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();return ctx}catch(e){return null}}
+function note(freq,dur=.12,start=0,form='sine',vol=.06,end=freq){let a=audio();if(!a)return;let o=a.createOscillator(),v=a.createGain(),now=a.currentTime+start;o.type=form;o.frequency.setValueAtTime(freq,now);if(end!==freq)o.frequency.exponentialRampToValueAtTime(end,now+dur);v.gain.setValueAtTime(.0001,now);v.gain.exponentialRampToValueAtTime(vol,now+.015);v.gain.exponentialRampToValueAtTime(.0001,now+dur);o.connect(v).connect(a.destination);o.start(now);o.stop(now+dur+.03)}
+function sfx(name){if(name==='honey')[[520,0],[690,.09],[920,.2]].forEach(([f,s])=>note(f,.14,s,'triangle',.065));if(name==='hurt'){note(720,.21,0,'triangle',.095,250);note(360,.29,.12,'sawtooth',.035,140)}if(name==='win')[[523,0],[659,.16],[784,.32],[1046,.54],[784,.78],[1046,.96]].forEach(([f,s],i)=>note(f,i===5?.55:.21,s,'triangle',.085));if(name==='lose')[[380,0],[270,.18],[170,.36]].forEach(([f,s])=>note(f,.22,s,'triangle',.06));if(name==='item'){note(510,.11);note(810,.15,.11)}if(name==='alarm'){note(520,.12,0,'square',.038);note(720,.11,.13,'square',.025)}}
+// Original 16-bar forest theme: pentatonic wooden plucks, soft chords and bass.
+let musicOn=true,musicTimer=null,musicBus=null,musicStep=0,musicNext=0;
+const musicVoices=new Set();
+const melody=[
+ [72,0,76,79,0,76,74,0],[72,0,67,0,69,72,0,0],
+ [69,0,72,76,0,74,72,0],[67,0,64,0,67,69,0,0],
+ [65,0,69,72,0,69,67,0],[64,0,67,72,0,76,74,0],
+ [74,0,76,79,0,76,74,0],[72,0,69,67,0,0,0,0],
+ [79,0,76,72,0,74,76,0],[74,0,72,69,0,67,0,0],
+ [76,0,72,69,0,72,74,0],[76,0,79,0,76,74,0,0],
+ [77,0,76,72,0,69,72,0],[76,0,74,72,0,67,69,0],
+ [74,0,76,74,0,69,67,0],[72,0,76,0,72,0,0,0]
+];
+const harmony=[[48,52,55],[45,48,52],[41,45,48],[43,47,50]];
+function musicTone(midi,when,duration,volume,type='sine'){
+ if(!ctx||!musicBus)return;
+ let osc=ctx.createOscillator(),gain=ctx.createGain();
+ osc.type=type;osc.frequency.setValueAtTime(440*Math.pow(2,(midi-69)/12),when);
+ gain.gain.setValueAtTime(0,when);gain.gain.linearRampToValueAtTime(volume,when+.012);
+ gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
+ osc.connect(gain);gain.connect(musicBus);musicVoices.add(osc);
+ osc.onended=()=>{musicVoices.delete(osc);osc.disconnect();gain.disconnect()};
+ osc.start(when);osc.stop(when+duration+.025);
+}
+function musicSchedule(){
+ if(!musicOn||mode!=='playing'||!ctx)return;
+ const beat=60/108,step=beat/2;
+ if(musicNext<ctx.currentTime-.1)musicNext=ctx.currentTime+.03;
+ while(musicNext<ctx.currentTime+.16){
+  let bar=Math.floor(musicStep/8)%16,pos=musicStep%8,chord=harmony[Math.floor(bar/2)%4],n=melody[bar][pos];
+  if(n){musicTone(n,musicNext,.29,.12,'sine');musicTone(n+12,musicNext,.13,.018,'sine')}
+  if(pos===0||pos===4)musicTone(chord[0]-(pos===4?0:12),musicNext,.48,.09,'triangle');
+  if(pos===2||pos===6)chord.forEach((v,i)=>musicTone(v+12,musicNext+i*.018,.38,.025,'sine'));
+  if(pos%2===1)musicTone(84,musicNext,.045,.015,'triangle');
+  musicStep++;musicNext+=step;
+ }
+}
+function musicStart(){
+ if(!musicOn||mode!=='playing'||musicTimer!==null)return;
+ let a=audio(true);if(!a)return;
+ musicBus=a.createGain();musicBus.gain.setValueAtTime(0,a.currentTime);musicBus.gain.linearRampToValueAtTime(.55,a.currentTime+.3);musicBus.connect(a.destination);
+ musicNext=a.currentTime+.04;musicSchedule();musicTimer=setInterval(musicSchedule,50);
+}
+function musicStop(){
+ if(musicTimer!==null){clearInterval(musicTimer);musicTimer=null}
+ const bus=musicBus;musicBus=null;
+ if(bus&&ctx){let now=ctx.currentTime;bus.gain.cancelScheduledValues(now);bus.gain.setTargetAtTime(0,now,.025);for(let voice of musicVoices){try{voice.stop(now+.12)}catch(e){}}setTimeout(()=>bus.disconnect(),180)}
+}
+try{musicOn=localStorage.getItem('bearHoneyMusic')!=='off'}catch(e){}
+function musicLabel(){$('music').textContent=musicOn?'🎵 音乐：开启':'🎵 音乐：关闭'}
+$('music').onclick=()=>{musicOn=!musicOn;musicLabel();if(musicOn)musicStart();else musicStop();try{localStorage.setItem('bearHoneyMusic',musicOn?'on':'off')}catch(e){}};
+musicLabel();
+function buzzStart(){let a=audio();if(!a||buzz)return;buzz=a.createOscillator();buzzGain=a.createGain();let filter=a.createBiquadFilter();filter.type='lowpass';filter.frequency.value=470;buzz.type='sawtooth';buzz.frequency.value=110;buzzGain.gain.value=0;buzz.connect(filter);filter.connect(buzzGain);buzzGain.connect(a.destination);buzz.start()}
+function buzzStop(){if(buzz){try{buzz.stop()}catch(e){}buzz.disconnect();buzz=null;buzzGain=null}}
+function buzzUpdate(){if(!ctx||!buzzGain)return;let d=Math.min(...bees.map(b=>D(b,hero)),999),v=mode==='playing'&&soundOn?d<85?.035:d<155?.015:d<235?.006:.001:0;buzzGain.gain.setTargetAtTime(v,ctx.currentTime,.07)}
+function resize(){let r=shell.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr);scale=Math.min(cv.width/W,cv.height/H);ox=(cv.width-W*scale)/2;oy=(cv.height-H*scale)/2}window.addEventListener('resize',resize);resize();
+function ellipse(x,y,rx,ry,color,rotation=0){g.beginPath();g.ellipse(x,y,Math.max(.01,rx),Math.max(.01,ry),rotation,0,Math.PI*2);g.fillStyle=color;g.fill()}function rect(x,y,w,h,c,r=0){g.fillStyle=c;if(r){g.beginPath();g.roundRect(x,y,w,h,r);g.fill()}else g.fillRect(x,y,w,h)}function outlineCircle(x,y,r,col,width=2){g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.lineWidth=width;g.strokeStyle=col;g.stroke()}
+function buildStage(n){musicStop();musicStep=0;stage=n;const s=STAGES[n];mode='playing';score=0;hp=3;elapsed=0;remaining=s.time;hero={x:208,y:646,r:18,face:1,walk:0,inv:0,cry:0,action:0,hidden:false};held.clear();pointer=null;goal=null;path=[];pathGoal=null;sneak=false;updateSneakButton();harvest=null;inventory=[];effects=[];alarm=0;shake=0;bait=null;environment=[];
+ hives=layouts[n].map(([x,y],i)=>({x,y,full:true,lock:0,id:i}));
+ bushes=[];for(let i=0;i<s.bushes;i++){let x=55+rand(n*51+i*9)*315,y=215+rand(n*17+i*13)*348;if(hives.some(h=>Math.hypot(x-h.x,y-h.y)<76)||Math.hypot(x-208,y-646)<74){x=42+i*47%320;y=340+(i*57)%210}bushes.push({x,y,r:29+rand(i+5+n*2)*7})}
+ trees=[];for(let i=0;i<17;i++){let x=21+rand(i+100+n*23)*379,y=155+rand(i+131+n*17)*492;if(hives.some(h=>Math.hypot(x-h.x,y-h.y)<64)||Math.hypot(x-208,y-646)<65)continue;trees.push({x,y,r:22+rand(i+17)*14})}
+ flowers=Array.from({length:75},(_,i)=>({x:10+rand(i+151+n*17)*399,y:138+rand(i+221+n*18)*577,k:i%4,r:2+rand(i+23)*2}));
+ // 第二篇章的环境机关：紫蘑菇孢子 / 雨天积水，避开蜂巢和出生点。
+ if(s.special==='mushroom'||s.special==='storm'){
+  for(let i=0;i<5;i++){
+   let x=75+rand(n*200+i*35)*265,y=220+rand(n*80+i*57)*332;
+   if(hives.some(h=>Math.hypot(x-h.x,y-h.y)<74)||Math.hypot(x-208,y-646)<92)continue;
+   environment.push({x,y,r:24+rand(i+80)*11,type:s.special==='storm'?'puddle':'spores'});
+  }
+ }
+
+ bees=[];let total=s.bees+s.guards+s.ambush+s.queen;for(let i=0;i<total;i++){let type=i<s.bees?'patrol':i<s.bees+s.guards?'guard':i<s.bees+s.guards+s.ambush?'swift':'queen',home=hives[i%hives.length];bees.push({type,x:home.x+42,y:home.y+45,hx:home.x+42,hy:home.y+45,angle:i*2.4,phase:i*.85,speed:type==='swift'?104:type==='queen'?57:type==='guard'?79:70,stun:0,retreat:0,alert:0,look:i*2.4,state:'patrol',lastSeen:null,searchTimer:0,suspicion:0})}
+ things=[];let typ=['leaf','berry','decoy'];for(let i=0;i<s.items;i++){let x=63+rand(n*14+i*19+309)*292,y=262+rand(n*19+i*11+43)*311;if(hives.some(h=>Math.hypot(x-h.x,y-h.y)<35))y+=55;if(n===2&&(x<163||x>257)){if(Math.abs(y-riverY(x))<60)y=riverY(x)+75}things.push({x,y,type:typ[(i+n)%3],taken:false})}
+ $('overlay').classList.add('hidden');$('levelTitle').textContent=`第${n+1}关 · ${s.name}`;$('levelHud').textContent=`🌲 第${n+1}/${STAGES.length}关`;
+ notify(s.special==='mushroom'?'🍄 注意紫色孢子圈，会让小熊减速！':s.special==='storm'?'🌧️ 水洼会减慢移动，利用草丛潜行！':s.special==='night'?'✨ 夜色降低蜜蜂远距离发现你的概率':n===0?'靠近蜂巢后按采蜜，停留0.35秒完成':n===2?'溪流只能从中央石桥通过，先观察对岸蜜蜂！':'停在草丛中隐藏，采蜜会暴露位置！',4);updateHud();buzzStart();musicStart();}
+function updateSneakButton(){$('sneakBtn').textContent=sneak?'🐾 潜行：开':'🐾 潜行：关';$('sneakBtn').style.background=sneak?'#d1eaba':'#e9fff0e9'}
+function updateHud(){$('score').textContent=`🍯 ${score}/${STAGES[stage].target}`;$('health').textContent='❤️'.repeat(hp)+'♡'.repeat(3-hp);$('time').textContent='⏱ '+Math.ceil(remaining);$('pause').textContent=mode==='paused'?'▶':'⏸';let item=inventory[0],name=item==='leaf'?'🍃 隐身叶':item==='berry'?'❤️ 浆果':item==='decoy'?'🔔 诱饵':'🍃 道具';$('itemBtn').textContent=name+(item?' · 共'+inventory.length:' ×0');$('itemBtn').title='使用当前道具；右键或长按切换道具';$('itemBtn').disabled=!item||mode!=='playing';}
+function notify(s,dur=1.8){$('notice').textContent=s;$('notice').style.opacity='1';msgLeft=dur}
+function refreshLevelButtons(){let area=$('levelList');area.innerHTML='';for(let i=0;i<STAGES.length;i++){let b=document.createElement('button');b.className='stage'+(i===selected?' selected':'');b.disabled=i>=unlocked;b.innerHTML=`<strong>${i<unlocked?'🌟':'🔒'}</strong>第${i+1}关 · ${STAGES[i].name}`;b.onclick=()=>{selected=i;refreshLevelButtons()};area.appendChild(b)}}
+function panel({mascot,title,description,tip,button,list=false}){mode=mode==='paused'?'paused':mode;$('mascot').textContent=mascot;$('heading').textContent=title;$('description').innerHTML=description;$('tip').innerHTML=tip;$('start').textContent=button;$('levelList').style.display=list?'grid':'none';if(list)refreshLevelButtons();$('overlay').classList.remove('hidden')}
+function menu(){mode='menu';selected=Math.min(selected,unlocked-1);panel({mascot:'🐻🍯',title:'小熊的蜂蜜大计划',description:'清晨，小熊发现家里的蜂蜜罐空空的。<br>听说森林深处有甜甜的蜂蜜，它决定偷偷出发……',tip:'🌲 共10关，完成关卡自动解锁下一关<br>📱 点击地面自动寻路，靠近蜂巢偷蜜<br>🐾 潜行可缩短警戒距离，草丛可以躲藏<br>🍄 孢子圈 / 🌧️ 水洼会减速<br>⌨️ WASD移动 · Shift潜行 · 空格偷蜜 · E使用道具',button:'从选中关卡开始 ▶',list:true});updateHud()}
+function complete(){musicStop();buzzStop();held.clear();pointer=null;goal=null;harvest=null;mode='won';let final=stage===STAGES.length-1;sfx('win');unlocked=Math.max(unlocked,Math.min(STAGES.length,stage+2));selected=Math.min(stage+1,STAGES.length-1);try{localStorage.setItem('bearHoneyUnlockedV10',String(unlocked))}catch(e){}
+ if(final){panel({mascot:'🐻🍯🏆',title:'十关通关 · 蜂蜜大冒险完成！',description:'小熊穿过森林、蘑菇谷和风雨，终于带回黄金蜂蜜。<br><b>它和蜜蜂们一起办了一场盛大的森林蜂蜜宴会！</b>',tip:'🏆 十关全部通关！可以回到选关界面重新挑战任何已解锁关卡。',button:'返回关卡地图 ↻',list:false})}
+ else{panel({mascot:'🐻🏆🍯',title:`第${stage+1}关通过！`,description:`收集了 <b>${score}罐蜂蜜</b>，剩余 <b>${hp}颗爱心</b>。<br>下一关：<b>${STAGES[stage+1].name}</b><br>${STAGES[stage+1].story}`,tip:stage===4?'🌟 第一篇章完成！新篇章「森林深处」已经解锁。':'🎉 新关卡已解锁！观察地形，利用潜行和道具前进。',button:'进入下一关 ▶',list:false})}
+}
+function fail(){musicStop();buzzStop();mode='lost';harvest=null;goal=null;pointer=null;held.clear();sfx('lose');panel({mascot:'🐻💧',title:'小熊先撤退啦',description:`这次收集了 <b>${score}/${STAGES[stage].target}罐蜂蜜</b>。<br>${hp<=0?'蜜蜂太多，小熊决定回家休整。':'时间到了，先吃点点心再继续吧！'}`,tip:'💡 试试躲进草丛，或者先用道具引走守卫。',button:'重试这一关 ↻'})}
+function togglePause(){if(mode==='playing'){mode='paused';musicStop();buzzStop();goal=null;path=[];held.clear();pointer=null;harvest=null;hero.walk=0;panel({mascot:'⏸️🌳',title:'冒险暂停',description:`当前进度：${score}/${STAGES[stage].target}罐蜂蜜`,tip:'继续后，小熊会从原来的位置接着行动。',button:'继续冒险 ▶'})}else if(mode==='paused'){mode='playing';$('overlay').classList.add('hidden');buzzStart();musicStart()}updateHud()}
+// The stream is a real barrier; the bridge is its only crossing.
+function riverY(x){let u=clamp(x/W,0,1);return 350+Math.sin(u*Math.PI*2)*-17}
+function canStand(x,y){
+ if(x<24||x>395||y<158||y>679)return false;
+ if(stage===2 && !(x>=177&&x<=241) && Math.abs(y-riverY(x))<45)return false;
+ // Tree trunks are physical obstacles, but their leafy crowns are not.
+ for(const tr of trees)if(Math.hypot(x-tr.x,y-(tr.y-1))<12)return false;
+ return true;
+}
+function moveHero(dx,dy){let nx=clamp(hero.x+dx,24,395),ny=clamp(hero.y+dy,158,679);if(canStand(nx,ny)){hero.x=nx;hero.y=ny;return true}if(canStand(nx,hero.y)){hero.x=nx;return Math.abs(dx)>.001}if(canStand(hero.x,ny)){hero.y=ny;return Math.abs(dy)>.001}return false}
+const CELL=14,GX=Math.floor((395-24)/CELL)+1,GY=Math.floor((679-158)/CELL)+1;
+function gridPoint(ix,iy){return {x:24+ix*CELL,y:158+iy*CELL}}
+function nearestFree(ix,iy){let best=null,dist=Infinity;for(let radius=0;radius<12;radius++){
+ for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+ if(Math.max(Math.abs(dx),Math.abs(dy))!==radius)continue;
+ let x=ix+dx,y=iy+dy;if(x<0||y<0||x>=GX||y>=GY)continue;
+ let p=gridPoint(x,y);if(!canStand(p.x,p.y))continue;
+ let d=dx*dx+dy*dy;if(d<dist){best={x,y};dist=d}
+ }if(best)return best;
+ }return null}
+function hasClearPath(a,b){let d=D(a,b),n=Math.ceil(d/7);for(let i=1;i<=n;i++){let f=i/n;if(!canStand(a.x+(b.x-a.x)*f,a.y+(b.y-a.y)*f))return false}return true}
+function findPath(a,b){
+ let sx=Math.round((a.x-24)/CELL),sy=Math.round((a.y-158)/CELL),ex=Math.round((b.x-24)/CELL),ey=Math.round((b.y-158)/CELL);
+ let start=nearestFree(sx,sy),end=nearestFree(ex,ey);if(!start||!end)return [];
+ let key=(x,y)=>y*GX+x,score=new Float64Array(GX*GY).fill(Infinity),prev=new Int32Array(GX*GY).fill(-1),closed=new Uint8Array(GX*GY),open=[];
+ let s=key(start.x,start.y),e=key(end.x,end.y);score[s]=0;open.push({id:s,f:0});
+ let dirs=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]],count=0;
+ while(open.length&&count++<GX*GY*5){let k=0;for(let i=1;i<open.length;i++)if(open[i].f<open[k].f)k=i;
+ let id=open.splice(k,1)[0].id;if(closed[id])continue;closed[id]=1;if(id===e)break;
+ let cx=id%GX,cy=Math.floor(id/GX);
+ for(let [dx,dy] of dirs){let x=cx+dx,y=cy+dy;if(x<0||y<0||x>=GX||y>=GY)continue;
+ let pp=gridPoint(x,y),nid=key(x,y);if(closed[nid]||!canStand(pp.x,pp.y))continue;
+ if(dx&&dy){let x1=gridPoint(cx+dx,cy),y1=gridPoint(cx,cy+dy);if(!canStand(x1.x,x1.y)||!canStand(y1.x,y1.y))continue}
+ let ns=score[id]+(dx&&dy?1.414:1);if(ns>=score[nid])continue;score[nid]=ns;prev[nid]=id;
+ let heuristic=Math.hypot(x-end.x,y-end.y);open.push({id:nid,f:ns+heuristic});
+ }}
+ if(e!==s&&prev[e]<0)return [];
+ let route=[],cur=e;while(cur!==-1){route.push(gridPoint(cur%GX,Math.floor(cur/GX)));if(cur===s)break;cur=prev[cur]}
+ route.reverse();let smooth=[],pos={x:a.x,y:a.y},i=0;
+ while(i<route.length){let j=route.length-1;while(j>i&&!hasClearPath(pos,route[j]))j--;smooth.push(route[j]);pos=route[j];i=j+1}
+ if(hasClearPath(pos,b))smooth.push(b);
+ return smooth;
+}
+function setGoal(p){goal={x:clamp(p.x,24,395),y:clamp(p.y,158,679)};path=findPath(hero,goal);pathGoal=goal;if(!path.length)notify('这条路暂时不通，请选择其他位置',1.2)}
+function closestHive(){return hives.find(h=>h.full&&D(h,hero)<62)}
+function steal(){if(mode!=='playing'||harvest)return;let h=closestHive();if(!h){notify('还没靠近蜂巢，往蜂巢旁边走一点！',1.5);note(220,.08);return}if(h.lock>0){notify('蜂巢正在被守卫封锁！请稍等',1.3);return}harvest={h,t:0};hero.hidden=false;goal=null;path=[];held.clear();notify('🍯 装蜜需要0.35秒，会引起附近蜜蜂注意！',1.6);note(470,.11,0,'triangle',.045)}
+function pickHoney(h){if(!h.full)return;h.full=false;score++;hero.action=.7;harvest=null;sfx('honey');notify('偷到了！🍯 快逃跑！',1.8);let p={x:h.x,y:h.y-12};for(let i=0;i<16;i++){let a=i*Math.PI/8;effects.push({x:p.x,y:p.y,vx:Math.cos(a)*68,vy:Math.sin(a)*66-25,t:.8,c:'#fff0ab'})}for(let b of bees){if(D(b,h)<130)b.alert=Math.max(b.alert,1.5)}updateHud();if(score>=STAGES[stage].target)complete()}
+function collect(item){item.taken=true;inventory.push(item.type);sfx('item');notify(item.type==='leaf'?'获得隐身叶！点击右下角使用 🍃':item.type==='berry'?'获得爱心浆果！❤️':'获得蜜蜂诱饵！🔔');updateHud()}
+function useItem(){if(mode!=='playing'||!inventory.length)return;if(inventory[0]==='berry'&&hp>=3){notify('爱心已满，浆果已保留；长按道具可切换',2);return}let type=inventory.shift();if(type==='leaf'){hero.inv=Math.max(hero.inv,4.5);notify('🍃 隐身4.5秒！蜜蜂看不见小熊');for(let b of bees)b.retreat=2.5}else if(type==='berry'){hp=Math.min(3,hp+1);notify('❤️ 恢复1颗爱心！')}else{bait={x:hero.x+hero.face*57,y:hero.y-24,t:6};for(let b of bees)b.alert=0;notify('🔔 诱饵已投出，蜜蜂被吸引！')}sfx('item');updateHud()}
+function hurt(b){hp--;hero.inv=4;hero.cry=1.15;hero.action=0;harvest=null;goal=null;path=[];shake=.32;sfx('hurt');notify('哎呀！被蜇了！🐝 4秒保护，赶紧逃跑！',2.8);let dx=hero.x-b.x,dy=hero.y-b.y,l=Math.hypot(dx,dy)||1;for(let i=0;i<12;i++)moveHero(dx/l*5,dy/l*5);for(let bee of bees){bee.retreat=3.2;bee.alert=0;let dd=D(bee,hero)||1;bee.x=clamp(bee.x+(bee.x-hero.x)/dd*60,25,395);bee.y=clamp(bee.y+(bee.y-hero.y)/dd*60,145,670)}updateHud();if(hp<=0)fail()}
+function drawBackground(t){let colors=[['#c8edc2','#80bb79'],['#b9e8ab','#69a86a'],['#a8d9ba','#6fa79b'],['#afd8a8','#527b51'],['#a6d2ae','#63966d'],['#f6dc8b','#c2925b'],['#c7e6b4','#619775'],['#284f65','#172d50'],['#7d9eaf','#4f7b78'],['#f9df94','#a47a43']][STAGES[stage].theme],grad=g.createLinearGradient(0,0,0,H);grad.addColorStop(0,colors[0]);grad.addColorStop(1,colors[1]);rect(0,0,W,H,grad);g.save();g.globalAlpha=.33;ellipse(210,85,172,73,'#e6f6cc');g.restore();g.beginPath();g.moveTo(159,96);g.bezierCurveTo(115,250,252,300,170,420);g.bezierCurveTo(85,552,282,595,224,740);g.lineTo(319,740);g.bezierCurveTo(344,577,185,550,255,441);g.bezierCurveTo(340,315,217,249,249,96);g.closePath();g.fillStyle='#dbdf9d';g.fill();g.globalAlpha=.28;g.strokeStyle='#fff4bd';g.lineWidth=7;g.stroke();g.globalAlpha=1;
+ if(stage===2){g.beginPath();g.moveTo(0,riverY(0)-35);for(let x=0;x<=W;x+=4)g.lineTo(x,riverY(x)-35);for(let x=W;x>=0;x-=4)g.lineTo(x,riverY(x)+35);g.closePath();g.fillStyle='#67b4c4';g.fill();g.strokeStyle='#c0edf0';g.lineWidth=3;g.stroke();for(let i=0;i<13;i++){let x=(i*37+t*15)%W;ellipse(x,riverY(x)+Math.sin(i*4)*22,8,1.2,'#d7f8f0aa')}rect(163,299,94,102,'#745438',7);for(let i=0;i<8;i++)rect(169,303+i*12,82,9,'#bc9565',2);rect(163,298,6,104,'#ead5a3',2);rect(251,298,6,104,'#ead5a3',2);g.font='bold 12px system-ui';g.textAlign='center';g.fillStyle='#fff8df';g.fillText('唯一通道',210,291)}
+ if(stage===3||stage===4||stage===9){ellipse(210,143,103,61,'#315c3e55');ellipse(210,125,85,47,'#a87244');ellipse(210,113,73,38,'#765131');ellipse(210,105,64,27,'#5a3f2a')}
+ for(let f of flowers){ellipse(f.x,f.y,f.r,f.r,['#fff1d7','#ffc9d1','#e6d5ff','#ffe29e'][f.k]);ellipse(f.x,f.y,1.2,1.2,'#dfad49')}
+ for(let i=0;i<11;i++)ellipse(12+i*43,116+(i%3)*7,26,16,'#3a8d5977');}
+function drawEnvironment(t){
+ let special=STAGES[stage].special;
+ for(const zone of environment){
+  if(zone.type==='puddle'){ellipse(zone.x,zone.y,zone.r*1.22,zone.r*.62,'#639eb6a8');ellipse(zone.x-6,zone.y-4,zone.r*.65,zone.r*.23,'#bfe5e7a0')}
+  else {ellipse(zone.x,zone.y,zone.r,zone.r*.54,'#9863b48c');for(let k=0;k<4;k++)ellipse(zone.x+Math.cos(k*1.57+t*.4)*zone.r*.58,zone.y+Math.sin(k*1.57+t*.4)*zone.r*.27,4,3,'#f5daff9c')}
+ }
+ if(special==='leaves')for(let i=0;i<38;i++){let x=(rand(i+401)*W+t*(9+rand(i+402)*14))%W,y=150+rand(i+501)*530;ellipse(x,y+Math.sin(t+i)*6,6,2.9,i%3===0?'#c98237b0':'#f5d169b0',Math.sin(t+i)*.6)}
+ if(special==='night'){
+  g.fillStyle='#0a214455';g.fillRect(0,135,W,H-135);
+  for(let i=0;i<35;i++){let x=24+rand(i+610)*372,y=148+rand(i+710)*508,r=2+1.2*Math.sin(t*3+i);ellipse(x,y,Math.max(.7,r*2.4),Math.max(.7,r*2.4),'#fff2a320');ellipse(x,y,Math.max(.7,r),Math.max(.7,r),'#f9f2a9')}
+ }
+ if(special==='storm'){
+  g.save();g.strokeStyle='#d9eeec55';g.lineWidth=1.3;for(let i=0;i<70;i++){let x=(rand(i+815)*W+t*90)%W,y=(rand(i+915)*H+t*210)%H;g.beginPath();g.moveTo(x,y);g.lineTo(x-6,y+14);g.stroke()}g.restore();
+ }
+ if(special==='final')for(let i=0;i<16;i++){let x=20+rand(i+1001)*380,y=148+rand(i+1041)*460;ellipse(x,y,2.6,2.6,'#ffdc70b0')}
+}
+function tree(t){ellipse(t.x+3,t.y+10,22,10,'#30663e30');rect(t.x-8,t.y-20,16,39,'#94643c',4);ellipse(t.x-18,t.y-32,t.r*.79,t.r*.73,'#348455');ellipse(t.x+17,t.y-34,t.r*.77,t.r*.82,'#4b9b60');ellipse(t.x,t.y-49,t.r*.93,t.r*.82,'#60ac69');ellipse(t.x-11,t.y-58,t.r*.33,t.r*.18,'#acdc92aa')}
+function bush(b,t,front){let a=front?.88:1;g.globalAlpha=a;ellipse(b.x,b.y+9,b.r*1.18,b.r*.58,'#2b694c');ellipse(b.x-14,b.y,b.r*.66,b.r*.57,'#3b995f');ellipse(b.x+15,b.y-1,b.r*.65,b.r*.55,'#49aa69');ellipse(b.x,b.y-10,b.r*.66,b.r*.62,'#6cb879');ellipse(b.x-10,b.y-12,7,3,'#b0d59188');g.globalAlpha=1;}
+function hive(h,t){ellipse(h.x,h.y+27,27,9,'#2b673e55');rect(h.x-4,h.y-11,8,37,'#95643a',3);if(!h.full){ellipse(h.x,h.y-11,18,13,'#95754c');ellipse(h.x+2,h.y-14,7,6,'#634729');return}if(h.lock>0)outlineCircle(h.x,h.y-18,38,'#ef6868',3);ellipse(h.x,h.y-22,25,30,h.lock>0?'#c88d43':'#f3b53c');for(let i=-2;i<=2;i++){g.beginPath();g.ellipse(h.x,h.y-22+i*9,23-Math.abs(i)*3,5,0,0,Math.PI);g.strokeStyle='#bd7b25';g.lineWidth=2.7;g.stroke()}ellipse(h.x+3,h.y-11,7,9,'#70401e');ellipse(h.x-10,h.y-39,6,3,'#ffe18e');if(D(h,hero)<67){g.setLineDash([6,5]);outlineCircle(h.x,h.y-19,37+Math.sin(t*5)*1.6,'#fff7b4',2.5);g.setLineDash([])}if(harvest&&harvest.h===h){g.strokeStyle='#3b8655';g.lineWidth=6;g.beginPath();g.arc(h.x,h.y-19,41,-Math.PI/2,-Math.PI/2+Math.PI*2*harvest.t/HARVEST_TIME);g.stroke()}}
+function drawBee(b,t){
+ // Visible direction and detection cone. Amber = cautious; red = searching/chasing.
+ let radius=(b.type==='queen'?145:b.type==='guard'?138:b.type==='swift'?116:106)*(STAGES[stage].special==='night'?.74:1);
+ let opening=b.type==='guard'?0.83:1.05;
+ g.save();g.translate(b.x,b.y);g.rotate(b.look||0);
+ g.beginPath();g.moveTo(0,0);g.arc(0,0,radius,-opening/2,opening/2);g.closePath();
+ g.fillStyle=b.state==='chase'?'#ff76552c':b.state==='search'?'#ffd76c25':'#ffe89816';g.fill();
+ g.strokeStyle=b.state==='chase'?'#e95b57a0':'#bb913857';g.lineWidth=1.1;g.stroke();g.restore();
+ g.save();g.translate(b.x,b.y+Math.sin(t*9+b.phase)*3);let factor=b.type==='queen'?1.65:b.type==='swift'?.84:1;g.scale(factor,factor);ellipse(0,11,18,5,'#416c424c');ellipse(-8,-12,11,8,'#ffffffae',-.3);ellipse(9,-13,11,8,'#ffffffae',.3);ellipse(0,0,19,13,b.type==='guard'?'#ffd96b':b.type==='queen'?'#f9c75c':'#ffd45b');g.save();g.beginPath();g.ellipse(0,0,19,13,0,0,Math.PI*2);g.clip();rect(-7,-16,6,32,'#6c442b');rect(6,-16,5,32,'#6c442b');g.restore();ellipse(10,-2,2.7,3,'#36251d');if(b.type==='guard')ellipse(12,5,3,2,'#dc7872');if(b.type==='swift')rect(-23,-2,6,3,'#d8ebda');if(b.type==='queen'){rect(-9,-26,18,9,'#edbd52',4);rect(-10,-29,6,8,'#f5d977',2);rect(3,-30,7,10,'#f5d977',2);ellipse(0,-26,2,2,'#ed7777')}if(b.state==='search'){g.font='bold 17px system-ui';g.textAlign='center';g.fillStyle='#b86223';g.fillText('?',0,-26)}if(b.state==='chase'||b.alert>0||alarm>0&&b.type==='guard'){g.font='bold 21px system-ui';g.textAlign='center';g.fillStyle='#ffdc4f';g.strokeStyle='#7d4629';g.lineWidth=3;g.strokeText('!',0,-25);g.fillText('!',0,-25)}g.restore();}
+function bear(t){
+ g.save();
+ g.translate(hero.x,hero.y);
+  if(sneak){g.translate(0,5);g.scale(1,.90)} // crouched silhouette, original limbs and facial artwork untouched
+  let walking=hero.walk>0,step=Math.sin(t*13),bob=walking?Math.abs(step)*2:Math.sin(t*3)*.8;
+ if(hero.cry>0)bob+=Math.sin(t*19)*2;
+ let dir=hero.face||1;
+ let turn=dir>0?1:-1;
+ let stride=walking?step*4.8:0;
+ let lean=walking?(dir*.045 + step*.012):dir*.018;
+ let headShift=walking?2.8:1.8; // fixed positive local shift; after mirroring becomes facing direction
+ let nearEyeX=10.5, farEyeX=-8.4, nearEyeW=4.2, farEyeW=3.2;
+ let nearPupilX=9.5, farPupilX=-7.4;
+ let muzzleX=2.8, noseX=3.6, mouthX=2.7;
+ g.translate(0,bob);
+ g.scale(hero.face,1);
+ g.rotate(lean);
+ let alpha=hero.hidden?.72:1;
+ if(hero.inv>0&&Math.floor(t*12)%2)alpha*=.53;
+ g.globalAlpha=alpha;
+ // ground shadow
+ ellipse(0,16,29,8,'#265a3a44');
+ // ears behind head
+ ellipse(-16.3,-36.6,9.8,10.7,'#8d532f');ellipse(16.3,-36.6,9.8,10.7,'#8d532f');
+ ellipse(-16.3,-36.6,5.1,5.8,'#de9f7c');ellipse(16.3,-36.6,5.1,5.8,'#de9f7c');
+ // legs with fuller feet
+ ellipse(-10+stride,8.5,8.8,16.2,'#8d5a34');ellipse(10-stride,8.5,8.8,16.2,'#8d5a34');
+ ellipse(-10+stride,12.8,7.6,13.2,'#bf7f4b');ellipse(10-stride,12.8,7.6,13.2,'#bf7f4b');
+ ellipse(-12+stride,22.4,10.4,6.8,'#8d5a34');ellipse(12-stride,22.4,10.4,6.8,'#8d5a34');
+ ellipse(-12+stride,20.7,9.2,5.2,'#cf8d57');ellipse(12-stride,20.7,9.2,5.2,'#cf8d57');
+ // arms: explicitly open to the OUTSIDE of the body, not folding inward
+ let hurtLift=hero.cry>0?-1.2:0;
+ let stealReach=hero.action>0?2.4:0;
+ let stealRaise=hero.action>0?-0.8:0;
+ let armSwing=walking?Math.sin(t*12)*0.28:0; // larger swing while walking
+ let armLift=walking?Math.sin(t*12)*1.8:0; // visible up/down motion
+ function drawOpenArm(side, reach, raise){
+   g.save();
+   // place the shoulder clearly on the body side; during walking, arms move up and down alternately
+   let ySwing = side>0 ? -armLift : armLift;
+   g.translate(side*(21.6+reach),-9.5+hurtLift+raise+ySwing);
+   // keep the arms opened outward, and add extra rotation while walking
+   g.rotate((side>0 ? -0.78 : 0.78) + side*armSwing + (hero.action>0&&side>0?-0.08:0));
+   // shoulder cap
+   ellipse(0,0,4.2,4.5,'#a56538');
+   // arm silhouette
+   ellipse(0,10.0,6.2,13.9,'#9c5d32');
+   // subtle inner band
+   ellipse(0.1,10.4,4.5,10.6,'#b97543');
+   // tiny claws
+   g.strokeStyle='#2f221d'; g.lineWidth=1.45; g.beginPath();
+   g.moveTo(-1.8,20.8); g.lineTo(-2.7,22.5);
+   g.moveTo(0,21.2); g.lineTo(0,23.0);
+   g.moveTo(1.8,20.8); g.lineTo(2.7,22.5);
+   g.stroke();
+   g.restore();
+ }
+ // arms first: shoulders sit BEHIND the body, outer arms remain visible
+ drawOpenArm(-1,0,0);
+ drawOpenArm(1,stealReach,stealRaise);
+ // body and belly
+ ellipse(0,-6,22.5,27.5,'#ab6838');ellipse(0,-0.5,16.2,20.2,'#efc695');
+ ellipse(-6,-10,7.4,9.2,'#f7deb466');ellipse(6.5,4,5.5,8.0,'#e7b57f2e');
+ // toe marks
+ g.strokeStyle='#8b5b39';g.lineWidth=1.4;g.beginPath();
+ g.moveTo(-15+stride,21.3);g.lineTo(-13+stride,19.7);g.moveTo(-10+stride,21.7);g.lineTo(-8+stride,20.1);
+ g.moveTo(8-stride,21.7);g.lineTo(10-stride,20.1);g.moveTo(13-stride,21.3);g.lineTo(15-stride,19.7);g.stroke();
+ // head slightly shifted in the facing direction
+ g.save();g.translate(headShift,0);
+ ellipse(0,-30,25.8,24.4,'#bb7946');
+ ellipse(-4,-46,10.6,3.2,'#dda06b66');
+ g.beginPath();g.moveTo(-6,-51);g.lineTo(0,-61);g.lineTo(6,-51);g.fillStyle='#bb7946';g.fill();
+ // eyes: near eye larger, far eye smaller for directional feel
+ if(hero.cry>0){
+   g.strokeStyle='#51342a';g.lineWidth=1.7;g.beginPath();
+   g.moveTo(farEyeX-2,-31);g.lineTo(farEyeX+2,-31);g.moveTo(nearEyeX-2,-31);g.lineTo(nearEyeX+3,-31);g.stroke();
+ }else{
+   ellipse(farEyeX,-32.2,farEyeW,4.2,'#fffaf1');ellipse(nearEyeX,-32.1,nearEyeW,4.9,'#fffaf1');
+   ellipse(farPupilX,-31.7,1.7,2.5,'#29231e');ellipse(nearPupilX,-31.7,2.1,3.0,'#29231e');
+   ellipse(farPupilX-.3,-33.4,.75,.75,'white');ellipse(nearPupilX-.2,-33.5,.95,.95,'white');
+ }
+ // brows more expressive
+ g.lineWidth=2.5;g.strokeStyle='#6c442c';g.beginPath();
+ g.moveTo(-13,-40);g.quadraticCurveTo(-7.3,-44.2,-2.2,-39.7);g.moveTo(3.5,-39.8);g.quadraticCurveTo(10.3,-44.1,15.8,-39.6);g.stroke();
+ // cheeks
+ ellipse(-15.5,-23.2,4.6,3.2,'#e8a07688');ellipse(16,-23.2,5.0,3.4,'#e8a07688');
+ // muzzle, nose, smile shifted toward facing direction
+ ellipse(muzzleX,-22.5,14.6,10.9,'#f2d6ac');ellipse(noseX,-26.0,6.7,4.8,'#694431');ellipse(noseX-1.2,-27.0,1.8,1.1,'#a47b61');
+ g.strokeStyle='#704831';g.lineWidth=1.95;g.beginPath();g.moveTo(mouthX,-22.1);g.lineTo(mouthX,-18.3);
+ if(hero.cry>0){g.stroke();ellipse(mouthX,-14.0,4.1,4.9,'#7c4135')}else{g.moveTo(mouthX-6.6,-18.4);g.quadraticCurveTo(mouthX,-9.2,mouthX+8.6,-18.2);g.stroke()}
+ // forehead and belly highlights
+ ellipse(-2,-39,7.2,2.2,'#f0bf8b33');ellipse(0,3.8,10,5.4,'#fff2dc22');
+ g.restore();
+  if(sneak){g.globalAlpha=.82;g.fillStyle='#e7f5ce';g.font='bold 10px system-ui';g.textAlign='center';g.fillText(hero.hidden?'隐蔽中':'潜行',0,-74);g.globalAlpha=alpha}
+  // protection ring
+ if(hero.inv>0){g.globalAlpha=.85;g.strokeStyle='#ffe580';g.lineWidth=2.3;g.beginPath();g.arc(0,-23,35,-Math.PI*.4,Math.PI*1.4);g.stroke();g.fillStyle='#fff9d4';g.font='bold 11px system-ui';g.textAlign='center';g.fillText(Math.ceil(hero.inv)+'秒',0,-66)}
+ g.restore();
+}
+function drawItem(item,t){if(item.taken)return;let bob=Math.sin(t*3+item.x)*3;ellipse(item.x,item.y+10,10,4,'#295e3e4c');g.font='bold 23px system-ui';g.textAlign='center';g.fillText(item.type==='leaf'?'🍃':item.type==='berry'?'❤️':'🔔',item.x,item.y+bob+4);outlineCircle(item.x,item.y-3+bob,15,'#fffaaf88',1.6)}
+function drawing(t){g.save();g.setTransform(1,0,0,1,0,0);rect(0,0,cv.width,cv.height,'#2e5d3d');g.translate(ox+(shake?Math.sin(t*90)*shake*9:0),oy);g.scale(scale,scale);drawBackground(t);drawEnvironment(t);for(let tr of trees.filter(tr=>tr.y<hero.y-5))tree(tr);for(let b of bushes)bush(b,t,false);for(let h of hives)hive(h,t);for(let item of things)drawItem(item,t);
+ if(bait){ellipse(bait.x,bait.y+9,14,5,'#385b3766');g.font='24px system-ui';g.textAlign='center';g.fillText('🔔',bait.x,bait.y+Math.sin(t*7)*2)}
+ for(let bee of bees)drawBee(bee,t);
+ if(goal){if(path.length){g.save();g.beginPath();g.moveTo(hero.x,hero.y);for(const waypoint of path)g.lineTo(waypoint.x,waypoint.y);g.setLineDash([4,7]);g.strokeStyle='#fff6b78b';g.lineWidth=2;g.stroke();g.restore()}g.setLineDash([5,5]);outlineCircle(goal.x,goal.y,10+Math.sin(t*7)*2,'#fff4ae',2);g.setLineDash([]);ellipse(goal.x,goal.y,3,3,'#f5bb49')}
+ bear(t);for(let tr of trees.filter(tr=>tr.y>=hero.y-5))tree(tr);for(let b of bushes)if(D(b,hero)<b.r+13)bush(b,t,true);
+ for(let e of effects){g.globalAlpha=Math.max(0,e.t/.8);ellipse(e.x,e.y,3.5,3.5,e.c)}g.globalAlpha=1;
+ if(hero.hidden){rect(138,115,144,27,'#244f3bc7',12);g.textAlign='center';g.fillStyle='#fff5cf';g.font='bold 12px system-ui';g.fillText('🌿 草丛隐藏中',210,133)}
+ if(alarm>0){g.fillStyle='#ffe2a6cc';g.font='bold 15px system-ui';g.textAlign='center';g.fillText('⚠ 守卫蜂发出警报！',210,160)}g.restore()}
+function tickGame(dt,t){if(mode!=='playing')return;elapsed+=dt;remaining-=dt;shake=Math.max(0,shake-dt);hero.inv=Math.max(0,hero.inv-dt);hero.cry=Math.max(0,hero.cry-dt);hero.action=Math.max(0,hero.action-dt);alarm=Math.max(0,alarm-dt);if(bait){bait.t-=dt;if(bait.t<=0)bait=null}
+ for(let h of hives)h.lock=Math.max(0,h.lock-dt);
+  let dx=(held.has('right')?1:0)-(held.has('left')?1:0),dy=(held.has('down')?1:0)-(held.has('up')?1:0);
+  let manual=dx!==0||dy!==0,moving=false;
+  if(manual){let l=Math.hypot(dx,dy);dx/=l;dy/=l;goal=null;path=[]}
+  else if(goal){
+   while(path.length&&D(hero,path[0])<8)path.shift();
+   if(!path.length){if(D(hero,goal)<14){goal=null}else{path=findPath(hero,goal);if(!path.length)goal=null}}
+   if(path.length){let pt=path[0],d=D(hero,pt);if(d>1){dx=(pt.x-hero.x)/d;dy=(pt.y-hero.y)/d}}
+  }
+  if(dx||dy){let speed=sneak?86:147;
+   if(environment.some(z=>D(z,hero)<z.r*.95))speed*=STAGES[stage].special==='storm'?.60:.64;
+   let d=Math.min(speed*dt,goal&&path.length?D(hero,path[0]):speed*dt);
+   moving=moveHero(dx*d,dy*d);if(dx!==0)hero.face=dx<0?-1:1;
+   if(!moving&&goal){path=findPath(hero,goal);if(!path.length){goal=null;notify('前面有障碍，重新选择路线',1.5)}}
+  }
+  hero.walk=moving?1:0;
+  hero.hidden=bushes.some(b=>D(b,hero)<b.r*.78)&&!harvest&&(!moving||sneak);
+ for(let item of things)if(!item.taken&&D(item,hero)<27)collect(item);
+ if(harvest){harvest.t+=dt;if(D(harvest.h,hero)>65||moving){harvest=null;notify('移动会打断采蜜！',1.1)}else{for(let b of bees)if(D(b,harvest.h)<165)b.alert=Math.max(b.alert,.65);if(harvest.t>=HARVEST_TIME){pickHoney(harvest.h);if(mode!=='playing')return}}}
+  for(let bee of bees){
+   bee.retreat=Math.max(0,bee.retreat-dt);bee.stun=Math.max(0,bee.stun-dt);bee.alert=Math.max(0,bee.alert-dt);
+   bee.angle+=dt*(bee.type==='swift'?1.35:.8);
+   let d=D(bee,hero),radius=(bee.type==='queen'?145:bee.type==='guard'?138:bee.type==='swift'?116:106)*(STAGES[stage].special==='night'?.74:1);
+   let opening=bee.type==='guard'?.83:1.05;
+   let toward=Math.atan2(hero.y-bee.y,hero.x-bee.x);
+   let angleDiff=Math.atan2(Math.sin(toward-bee.look),Math.cos(toward-bee.look));
+   let detectable=!hero.hidden&&hero.inv<=0&&d<radius*(sneak?.64:1)&&Math.abs(angleDiff)<opening/2;
+   // Close proximity is also audible; sneaking greatly reduces noise.
+   if(!hero.hidden&&hero.inv<=0&&d<(sneak?21:38))detectable=true;
+   let target=null;
+   if(bee.retreat>0||hero.inv>0){bee.state='return';target={x:bee.hx,y:bee.hy};bee.suspicion=0}
+   else if(bait&&D(bee,bait)<260){bee.state='search';target=bait}
+   else if(detectable){
+    bee.suspicion=Math.min(1.3,bee.suspicion+dt*(sneak?.8:2.5));
+    bee.lastSeen={x:hero.x,y:hero.y};bee.searchTimer=3.5;
+    if(bee.suspicion>=.46){bee.state='chase';target=hero;bee.alert=Math.max(bee.alert,.5);
+     if(bee.type==='guard'&&bee.stun<=0){bee.stun=5;alarm=2.1;sfx('alarm');for(const other of bees)if(D(other,bee)<170){other.searchTimer=Math.max(other.searchTimer,2);other.lastSeen={x:hero.x,y:hero.y}}}
+    }
+   }else{bee.suspicion=Math.max(0,bee.suspicion-dt*.55);
+    bee.searchTimer=Math.max(0,bee.searchTimer-dt);
+    if(bee.searchTimer>0&&bee.lastSeen){bee.state='search';target=bee.lastSeen}
+   }
+   if(!target){bee.state='patrol';target={x:bee.hx+Math.cos(bee.angle+bee.phase)*40,y:bee.hy+Math.sin(bee.angle*.85+bee.phase)*32}}
+   let vx=target.x-bee.x,vy=target.y-bee.y,l=Math.hypot(vx,vy);
+   if(l>2){let wanted=Math.atan2(vy,vx),delta=Math.atan2(Math.sin(wanted-bee.look),Math.cos(wanted-bee.look));bee.look+=clamp(delta,-dt*4,dt*4);
+    let speed=target===hero?bee.speed*1.22:target===bait?bee.speed*1.1:bee.state==='search'?bee.speed*.8:bee.speed*.63;
+    bee.x+=vx/l*Math.min(speed*dt,l);bee.y+=vy/l*Math.min(speed*dt,l)}
+   bee.x=clamp(bee.x,24,395);bee.y=clamp(bee.y,142,679);
+   if(bee.type==='queen'&&elapsed>1&&Math.floor(elapsed/6)!==Math.floor((elapsed-dt)/6)){
+    let active=hives.filter(h=>h.full);if(active.length){let open=active[Math.floor(elapsed/6)%active.length];open.lock=2.2;notify('👑 蜂后封锁了闪红光的蜂巢！',1.7)}
+   }
+   if(hero.inv<=0&&!hero.hidden&&D(bee,hero)<29*(bee.type==='queen'?1.3:1)){hurt(bee);if(mode!=='playing')return}
+  }
+ for(let i=effects.length-1;i>=0;i--){let e=effects[i];e.x+=e.vx*dt;e.y+=e.vy*dt;e.vy+=90*dt;e.t-=dt;if(e.t<=0)effects.splice(i,1)}
+ if(msgLeft>0){msgLeft-=dt;if(msgLeft<=0)$('notice').style.opacity='0'}else if(closestHive()){notify('蜂巢就在身边，按「偷蜂蜜」！',.2)}
+ if(remaining<=0){fail();return}if(tick>.17){tick=0;updateHud()}tick+=dt;buzzUpdate();}
+function frame(ts){let t=ts/1000,dt=last?Math.min((ts-last)/1000,.05):0;last=ts;tickGame(dt,t);drawing(t);requestAnimationFrame(frame)}
+function canvasPoint(e){let r=cv.getBoundingClientRect(),px=(e.clientX-r.left)*cv.width/r.width,py=(e.clientY-r.top)*cv.height/r.height;return {x:(px-ox)/scale,y:(py-oy)/scale}}
+cv.addEventListener('pointerdown',e=>{if(mode!=='playing')return;e.preventDefault();pointer=e.pointerId;cv.setPointerCapture(e.pointerId);let p=canvasPoint(e);setGoal(p)});let nextDragPath=0;cv.addEventListener('pointermove',e=>{if(mode!=='playing'||e.pointerId!==pointer||performance.now()<nextDragPath)return;nextDragPath=performance.now()+85;e.preventDefault();let p=canvasPoint(e);setGoal(p)});for(let ev of ['pointerup','pointercancel','lostpointercapture'])cv.addEventListener(ev,e=>{if(pointer===e.pointerId)pointer=null});
+const mapping={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',KeyW:'up',KeyS:'down',KeyA:'left',KeyD:'right'};window.addEventListener('keydown',e=>{if(mapping[e.code]){e.preventDefault();held.add(mapping[e.code])}else if(e.code==='Space'){e.preventDefault();if(!e.repeat)steal()}else if(e.code==='ShiftLeft'||e.code==='ShiftRight'){e.preventDefault();if(!e.repeat){sneak=!sneak;updateSneakButton()}}else if(e.code==='KeyE'){e.preventDefault();if(!e.repeat)useItem()}else if(e.code==='Escape'||e.code==='KeyP'){e.preventDefault();if(!e.repeat)togglePause()}});window.addEventListener('keyup',e=>{if(mapping[e.code])held.delete(mapping[e.code])});window.addEventListener('blur',()=>{held.clear();if(mode==='playing')togglePause()});
+$('sneakBtn').onclick=()=>{if(mode==='playing'){sneak=!sneak;updateSneakButton();notify(sneak?'🐾 已进入潜行：走得慢，更难被发现':'🐻 正常奔跑：移动更快',1.4)}};$('pause').onclick=togglePause;$('stealBtn').onclick=steal;let itemPressAt=0,itemLongPress=false,itemPressTimer=null;
+function rotateItem(){if(mode!=='playing'||inventory.length<2)return;inventory.push(inventory.shift());updateHud();notify('已切换道具',1)}
+$('itemBtn').addEventListener('pointerdown',()=>{itemPressAt=performance.now();itemLongPress=false;itemPressTimer=setTimeout(()=>{itemLongPress=true;rotateItem()},450)});
+for(let ev of ['pointerup','pointercancel','pointerleave'])$('itemBtn').addEventListener(ev,()=>clearTimeout(itemPressTimer));
+$('itemBtn').onclick=()=>{if(!itemLongPress&&performance.now()-itemPressAt<450)useItem()};
+$('itemBtn').oncontextmenu=e=>{e.preventDefault();rotateItem()};$('sound').onclick=()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊 音效：开启':'🔇 音效：关闭';if(!soundOn)buzzStop();else if(mode==='playing')buzzStart()};$('start').onclick=()=>{if(mode==='paused'){togglePause();return}if(mode==='won'){if(stage===STAGES.length-1){menu();return}buildStage(stage+1);return}if(mode==='lost'){buildStage(stage);return}buildStage(selected)};
+try{unlocked=clamp(Math.max(parseInt(localStorage.getItem('bearHoneyUnlockedV10'))||1,parseInt(localStorage.getItem('bearHoneyUnlockedV5'))||1),1,STAGES.length)}catch(e){}menu();requestAnimationFrame(frame);
+})();
+</script></body></html>
